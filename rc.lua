@@ -48,6 +48,8 @@ floatapps =
     -- ["MPlayer"] = true,
     ["pinentry"] = true,
     ["gimp"] = true,
+    ["soulmebaby"] = true,
+    ["emesene"] = true,
     -- by instance
     ["mocp"] = true
 }
@@ -59,6 +61,7 @@ apptags =
     ["Navigator"] = { screen = 1, tag = 2 },
     ["thunderbird"] = { screen = 1, tag = 3 },
     ["soulmebaby"] = { screen = 1, tag = 5 },
+    ["emesene"] = { screen = 1, tag = 5 }
     -- ["mocp"] = { screen = 2, tag = 4 },
 }
 
@@ -73,7 +76,7 @@ beautiful.init(theme_path)
 -- Register theme in awful.
 -- This allows to not pass plenty of arguments to each function
 -- to inform it about colors we want it to draw.
-awful.beautiful.register(beautiful)
+-- awful.beautiful.register(beautiful)
 
 -- Uncomment this to activate autotabbing
 tabulous.autotab_start()
