@@ -19,7 +19,7 @@ theme_path = "/usr/share/awesome/themes/sky/theme.lua"
 beautiful.init(theme_path)
 
 -- This is used later as the default terminal and editor to run.
-terminal = "x-terminal-emulator"
+terminal = "urxvtc"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -34,15 +34,15 @@ modkey = "Mod1"
 layouts =
 {
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
+    -- awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.tile.top,
+    -- awful.layout.suit.fair,
+    -- awful.layout.suit.fair.horizontal,
     awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
-    awful.layout.suit.floating
+    -- awful.layout.suit.max.fullscreen,
+    -- awful.layout.suit.magnifier,
+    -- awful.layout.suit.floating
 }
 
 -- Table of clients that should be set floating. The index may be either
@@ -52,7 +52,7 @@ layouts =
 floatapps =
 {
     -- by class
-    -- ["MPlayer"] = true,
+    ["MPlayer"] = true,
     ["pinentry"] = true,
     ["gimp"] = true,
     -- by instance
@@ -63,9 +63,8 @@ floatapps =
 -- Use the screen and tags indices.
 apptags =
 {
-    -- ["Firefox"] = { screen = 1, tag = 2 },
+    ["Iceweasel"] = { screen = 1, tag = 8 },
     -- ["mocp"] = { screen = 2, tag = 4 },
-    ["MPlayer"] = { screen = 2, tag = 9 }
 }
 
 -- Define if we want to use titlebar on all applications.
@@ -215,10 +214,10 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "w", function () mymainmenu:show(true)        end),
 
     -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1) end),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1) end),
-    awful.key({ modkey,		  }, "Left", function () awful.screen.focus( 1)       end),
-    awful.key({ modkey,		  }, "Right", function () awful.screen.focus(-1)       end),
+    awful.key({ modkey,		  }, "Up", function () awful.client.swap.byidx(  1) end),
+    awful.key({ modkey,		  }, "Down", function () awful.client.swap.byidx( -1) end),
+    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus( 1)       end),
+    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus(-1)       end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -233,8 +232,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
-    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
+    awful.key({ modkey,           }, "Right", function () awful.tag.incmwfact( 0.05)    end),
+    awful.key({ modkey,           }, "Left",     function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
@@ -277,33 +276,34 @@ for s = 1, screen.count() do
 end
 
 for i = 1, keynumber do
-    table.foreach(awful.key({ modkey }, i,
+    globalkeys = awful.util.table.join(globalkeys,
+        awful.key({ modkey }, i,
                   function ()
                         local screen = mouse.screen
                         if tags[screen][i] then
                             awful.tag.viewonly(tags[screen][i])
                         end
-                  end), function(_, k) table.insert(globalkeys, k) end)
-    table.foreach(awful.key({ modkey, "Control" }, i,
+                  end),
+        awful.key({ modkey, "Control" }, i,
                   function ()
                       local screen = mouse.screen
                       if tags[screen][i] then
                           tags[screen][i].selected = not tags[screen][i].selected
                       end
-                  end), function(_, k) table.insert(globalkeys, k) end)
-    table.foreach(awful.key({ modkey, "Shift" }, i,
+                  end),
+        awful.key({ modkey, "Shift" }, i,
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.movetotag(tags[client.focus.screen][i])
                       end
-                  end), function(_, k) table.insert(globalkeys, k) end)
-    table.foreach(awful.key({ modkey, "Control", "Shift" }, i,
+                  end),
+        awful.key({ modkey, "Control", "Shift" }, i,
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.toggletag(tags[client.focus.screen][i])
                       end
-                  end), function(_, k) table.insert(globalkeys, k) end)
-    table.foreach(awful.key({ modkey, "Shift" }, "F" .. i,
+                  end),
+        awful.key({ modkey, "Shift" }, "F" .. i,
                   function ()
                       local screen = mouse.screen
                       if tags[screen][i] then
@@ -311,7 +311,7 @@ for i = 1, keynumber do
                               awful.client.movetotag(tags[screen][i], c)
                           end
                       end
-                   end), function(_, k) table.insert(globalkeys, k) end)
+                   end))
 end
 
 -- Set keys
@@ -379,9 +379,9 @@ awful.hooks.manage.register(function (c, startup)
     -- Check if the application should be floating.
     local cls = c.class
     local inst = c.instance
-    if floatapps[cls] then
+    if floatapps[cls] ~= nil then
         awful.client.floating.set(c, floatapps[cls])
-    elseif floatapps[inst] then
+    elseif floatapps[inst] ~= nil then
         awful.client.floating.set(c, floatapps[inst])
     end
 
