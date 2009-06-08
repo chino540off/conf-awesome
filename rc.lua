@@ -13,7 +13,7 @@ require("debian.menu")
 -- The default is a dark theme
 -- theme_path = "/usr/share/awesome/themes/default/theme.lua"
 -- Uncommment this for a lighter theme
-theme_path = "/usr/share/awesome/themes/sky/theme.lua"
+theme_path = os.getenv("HOME") .. "/conf/awesome/themes/theme.lua"
 
 -- Actually load theme
 beautiful.init(theme_path)
