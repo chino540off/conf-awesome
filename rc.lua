@@ -37,9 +37,9 @@ modkey = "Mod1"
 layouts =
 {
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
+    -- awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
+    -- awful.layout.suit.tile.top,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
     awful.layout.suit.max,
@@ -177,16 +177,16 @@ for s = 1, screen.count() do
                                           end, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    mywibox[s] = awful.wibox({ position = "top", screen = s, height = 16 })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
             --mylauncher,
             mytaglist[s],
+	    mylayoutbox[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
-        mylayoutbox[s],
         s == 1 and mysystray or nil,
 	myseparator,
         mytextclock,
