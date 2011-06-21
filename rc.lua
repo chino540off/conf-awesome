@@ -2,6 +2,7 @@
 require("awful")
 require("awful.autofocus")
 require("awful.rules")
+require("vicious")
 -- Theme handling library
 require("beautiful")
 -- Notification library
@@ -102,11 +103,20 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- }}}
 
 -- {{{ Wibox
+-- Create a separator
+myseparator = widget({ type = "textbox" })
+myseparator.text = " | "
+
 -- Create a textclock widget
-mytextclock = awful.widget.textclock({ align = "right" })
+mytextclock = widget({ type = "textbox" })
+vicious.register(mytextclock, vicious.widgets.date, "%R", 61)
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
+
+-- Create a battery Widget
+mybatwidget = widget({ type = "textbox" })
+vicious.register(mybatwidget, vicious.widgets.bat, "$2%", 60, "BAT0")
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -171,14 +181,18 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
-            mylauncher,
+            --mylauncher,
             mytaglist[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
-        mytextclock,
         s == 1 and mysystray or nil,
+	myseparator,
+        mytextclock,
+	myseparator,
+	mybatwidget,
+	myseparator,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -231,13 +245,15 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
     awful.key({ modkey,           }, "Right", function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey,           }, "Left",     function () awful.tag.incmwfact(-0.05)    end),
+    awful.key({ modkey,           }, "Left",  function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
+    awful.key({ modkey, "Shift"   }, "z",     function () awful.util.spawn("gnome-screensaver-command -l") end),
+    --awful.key({ modkey, "Shift"   }, "h",     function () os.execute("echo lol") end),
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -343,12 +359,12 @@ client.add_signal("manage", function (c, startup)
     -- awful.titlebar.add(c, { modkey = modkey })
 
     -- Enable sloppy focus
-    c:add_signal("mouse::enter", function(c)
-        if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-            and awful.client.focus.filter(c) then
-            client.focus = c
-        end
-    end)
+    --c:add_signal("mouse::enter", function(c)
+    --    if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+    --        and awful.client.focus.filter(c) then
+    --        client.focus = c
+    --    end
+    --end)
 
     if not startup then
         -- Set the windows at the slave,
