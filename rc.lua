@@ -16,7 +16,7 @@ require("debian.menu")
 -- The default is a dark theme
 -- theme_path = "/usr/share/awesome/themes/default/theme.lua"
 -- Uncommment this for a lighter theme
-theme_path = os.getenv("HOME") .. "/conf/awesome/themes/theme.lua"
+theme_path = awful.util.getdir("config") .. "/themes/theme.lua"
 
 -- Actually load theme
 beautiful.init(theme_path)
@@ -31,18 +31,17 @@ editor_cmd = terminal .. " -e " .. editor
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod1"
+modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
 {
-    awful.layout.suit.tile,
-    -- awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile,		-- 1
+    awful.layout.suit.tile.bottom,	-- 2
+    awful.layout.suit.fair,		-- 3 
+    awful.layout.suit.max,		-- 4
     -- awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.max,
+    -- awful.layout.suit.tile.left,
     -- awful.layout.suit.max.fullscreen,
     -- awful.layout.suit.magnifier,
     -- awful.layout.suit.floating
@@ -76,10 +75,19 @@ use_titlebar = false
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {}
+tags = {
+  names = {1, 2, 3, 4, 5, 6, 7, "web", "zik" },
+  layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[4] }
+}
+
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag(tags.names, s, tags.layout)
+    -- able to hide tags
+    --for i, t in ipairs(tags[s]) do
+    --    awful.tag.setproperty(t, "mwfact", i==5 and 0.13 or 0.5)
+    --    awful.tag.setproperty(t, "hide",   (i==6 or i==7) and true)
+    --end
 end
 -- }}}
 
@@ -103,20 +111,29 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- }}}
 
 -- {{{ Wibox
--- Create a separator
-myseparator = widget({ type = "textbox" })
-myseparator.text = " | "
+-- {{{ Reusable separators
+spacer			= widget({ type = "textbox"  })
+spacer.text		= " "
+separator		= widget({ type = "imagebox" })
+separator.image		= image(beautiful.widget_sep)
+awesomewidget		= widget({ type = "imagebox" })
+awesomewidget.image	= image(beautiful.awesome_icon)
+-- }}}
 
 -- Create a textclock widget
-mytextclock = widget({ type = "textbox" })
-vicious.register(mytextclock, vicious.widgets.date, "%R", 61)
+dateicon		= widget({ type = "imagebox" })
+dateicon.image		= image(beautiful.widget_date)
+datewidget		= widget({ type = "textbox" })
+vicious.register(datewidget, vicious.widgets.date, "%R", 61)
 
 -- Create a systray
-mysystray = widget({ type = "systray" })
+mysystray		= widget({ type = "systray" })
 
 -- Create a battery Widget
-mybatwidget = widget({ type = "textbox" })
-vicious.register(mybatwidget, vicious.widgets.bat, "$2%", 60, "BAT0")
+baticon			= widget({ type = "imagebox" })
+baticon.image		= image(beautiful.widget_bat)
+batwidget		= widget({ type = "textbox" })
+vicious.register(batwidget, vicious.widgets.bat, "$2%", 60, "BAT0")
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -182,17 +199,16 @@ for s = 1, screen.count() do
     mywibox[s].widgets = {
         {
             --mylauncher,
+	    awesomewidget,
             mytaglist[s],
 	    mylayoutbox[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
         s == 1 and mysystray or nil,
-	myseparator,
-        mytextclock,
-	myseparator,
-	mybatwidget,
-	myseparator,
+        separator, datewidget, dateicon,
+        separator, batwidget, baticon,
+	separator,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -209,8 +225,8 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ modkey, "Control" }, "Left",   awful.tag.viewprev       ),
-    awful.key({ modkey, "Control" }, "Right",  awful.tag.viewnext       ),
+    awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
+    awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey,           }, "Tab",
@@ -244,8 +260,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
-    awful.key({ modkey,           }, "Right", function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey,           }, "Left",  function () awful.tag.incmwfact(-0.05)    end),
+    awful.key({ modkey, "Control" }, "Right", function () awful.tag.incmwfact( 0.05)    end),
+    awful.key({ modkey, "Control" }, "Left",  function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
