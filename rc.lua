@@ -75,7 +75,7 @@ shifty.config.apps = {
 	 { match = {terminal},				tag = "[2. sh]",	opacity = 0.85},
 	 { match = {"Evince", "evince" },		tag = "[4. doc]",	opacity = 1.0 },
          { match = {"Pidgin"},				tag = "[5. im]",	float = true },
-         { match = {browser} ,				tag = "[6. www]",	opacity = 0.95 } ,
+         { match = {"Chromium", browser} ,		tag = "[6. www]",	opacity = 0.95 } ,
 	 { match = {"spotify"},				tag = "[7. zik]",	opacity = 1.0 },
 	 { match = {"vlc"},				tag = "[8. media]",	opacity = 1.0 },
          { match = { "" },
