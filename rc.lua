@@ -74,6 +74,7 @@ shifty.config.apps = {
 	 { match = {"Gvim", "gvim" },      		tag = "[1. code]",	opacity = 0.90 },
 	 { match = {terminal},				tag = "[2. sh]",	opacity = 0.85 },
          { match = {"Wireshark"},		      	tag = "[3. misc]",	opacity = 1.0 },
+         { match = {"gitk"},			      	tag = "[3. misc]",	opacity = 1.0 },
 	 { match = {"Evince", "evince" },		tag = "[4. doc]",	opacity = 1.0 },
          { match = {"Pidgin"},				tag = "[5. im]",	float = true },
          { match = {"Chromium", browser} ,		tag = "[6. www]",	opacity = 0.95 } ,
