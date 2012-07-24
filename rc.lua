@@ -57,8 +57,8 @@ layouts =
 -- {{{2 Tags definition
 shifty.config.tags =
 {
-    ["[1. code]"] =   { layout = layouts[4],	position = 1, nopopup=true,	exclusive=false,	spawn="gvim --servername 1"},
-    ["[2. sh]"] =     { layout = layouts[1],	position = 2, init = true, 				spawn=terminal},
+    ["[1. code]"] =   { layout = layouts[4],	position = 1, nopopup=true,	exclusive=false,	spawn = "gvim --servername 1"},
+    ["[2. sh]"] =     { layout = layouts[1],	position = 2, init = true, 				spawn = terminal},
     ["[3. misc]"] =   { layout = layouts[1],	position = 3, nopopup=true,	exclusive=true},
     ["[4. doc]"] =    { layout = layouts[4],	position = 4},
     ["[5. im]"] =     { layout = layouts[1],	position = 5, nopopup=true,	exclusive=true},
@@ -281,11 +281,11 @@ root.buttons(awful.util.table.join(
 -- }}}
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-    awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
+    awful.key({ modkey,			}, "Left",	awful.tag.viewprev       ),
+    awful.key({ modkey,			}, "Right",	awful.tag.viewnext       ),
+    awful.key({ modkey,			}, "Escape",	awful.tag.history.restore),
 
-    awful.key({ modkey,           }, "Tab",
+    awful.key({ modkey,			}, "Tab",
         function ()
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
@@ -295,14 +295,14 @@ globalkeys = awful.util.table.join(
     --         awful.client.focus.byidx(-1)
     --         if client.focus then client.focus:raise() end
     --     end),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show(true)        end),
+    awful.key({ modkey,			}, "w",		function () mymainmenu:show(true) end),
 
     -- Layout manipulation
-    awful.key({ modkey,		  }, "Up", function () awful.client.swap.byidx(  1) end),
-    awful.key({ modkey,		  }, "Down", function () awful.client.swap.byidx( -1) end),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus( 1)       end),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus(-1)       end),
-    awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+    awful.key({ modkey,			}, "Up",	function () awful.client.swap.byidx(  1) end),
+    awful.key({ modkey,			}, "Down",	function () awful.client.swap.byidx( -1) end),
+    awful.key({ modkey, "Control"	}, "j",		function () awful.screen.focus( 1) end),
+    awful.key({ modkey, "Control"	}, "k",		function () awful.screen.focus(-1) end),
+    awful.key({ modkey,			}, "u",		awful.client.urgent.jumpto),
     -- awful.key({ modkey,           }, "Tab",
     --     function ()
     --         awful.client.focus.history.previous()
@@ -312,30 +312,33 @@ globalkeys = awful.util.table.join(
     --     end),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-    awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+    awful.key({ modkey,			}, "Return",	function () awful.util.spawn(terminal) end),
+    awful.key({ modkey, "Control"	}, "r",		awesome.restart),
+    awful.key({ modkey, "Shift"		}, "q",		awesome.quit),
 
-    awful.key({ modkey, "Control" }, "Right", function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey, "Control" }, "Left",  function () awful.tag.incmwfact(-0.05)    end),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
-    awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
-    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
-    awful.key({ modkey, "Shift"   }, "z",     function () awful.util.spawn("gnome-screensaver-command -l") end),
+    awful.key({ modkey, "Control"	}, "Right",	function () awful.tag.incmwfact( 0.05) end),
+    awful.key({ modkey, "Control"	}, "Left",	function () awful.tag.incmwfact(-0.05) end),
+    awful.key({ modkey, "Shift"		}, "h",		function () awful.tag.incnmaster( 1) end),
+    awful.key({ modkey, "Shift"		}, "l",		function () awful.tag.incnmaster(-1) end),
+    awful.key({ modkey, "Control"	}, "h",		function () awful.tag.incncol( 1) end),
+    awful.key({ modkey, "Control"	}, "l",		function () awful.tag.incncol(-1) end),
+    awful.key({ modkey,			}, "space",	function () awful.layout.inc(layouts,  1) end),
+    awful.key({ modkey, "Shift"		}, "space",	function () awful.layout.inc(layouts, -1) end),
+    awful.key({ modkey, "Shift"		}, "z",		function () awful.util.spawn("gnome-screensaver-command -l") end),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    awful.key({ modkey			}, "t",
+		function ()
+			awful.prompt.run({ prompt = "Tag Name: "},
+			mypromptbox[mouse.screen].widget,
+			function (s)
+				shifty.add({ name = "[X. " .. s .. "]", rel_index = 1, persist = true })
+			end)
+		end),
+    awful.key({ modkey			}, "x",		shifty.del),
 
-    awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run({ prompt = "Run Lua code: " },
-                  mypromptbox[mouse.screen].widget,
-                  awful.util.eval, nil,
-                  awful.util.getdir("cache") .. "/history_eval")
-              end)
+    awful.key({ modkey			}, "r",		function () mypromptbox[mouse.screen]:run() end)
+
 )
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them
@@ -371,22 +374,34 @@ clientbuttons = awful.util.table.join(
 
 -- Key loop
 
-for i=1, ( shifty.config.maxtags or 9 ) do
-  table.foreach(awful.key({ modkey, }, i, function () local t = awful.tag.viewonly(shifty.getpos(i)) end), function(_, k) table.insert(globalkeys, k) end)
-  table.foreach(awful.key({ modkey, "Control" }, i, function () local t = shifty.getpos(i); t.selected = not t.selected end), function(_, k) table.insert(globalkeys, k) end)
-  table.foreach(awful.key({ modkey, "Control", "Shift" }, i, function () if client.focus then awful.client.toggletag(shifty.getpos(i)) end end), function(_, k) table.insert(globalkeys, k) end)
-  -- move clients to other tags
-  table.foreach(awful.key({ modkey, "Shift" }, i,
-    function ()
-      if client.focus then
-        local c = client.focus
-        slave = not ( client.focus == awful.client.getmaster(mouse.screen))
-        t = shifty.getpos(i)
-        awful.client.movetotag(t)
-        awful.tag.viewonly(t)
-        if slave then awful.client.setslave(c) end
-      end
-    end), function(_, k) table.insert(globalkeys, k) end)
+for i = 1, ( shifty.config.maxtags or 9 ) do
+	table.foreach(awful.key({ modkey,			}, i,
+				function () local t = awful.tag.viewonly(shifty.getpos(i)) end),
+				function(_, k) table.insert(globalkeys, k) end)
+
+	table.foreach(awful.key({ modkey, "Control"		}, i,
+				function () local t = shifty.getpos(i); t.selected = not t.selected end),
+				function(_, k) table.insert(globalkeys, k) end)
+
+	table.foreach(awful.key({ modkey, "Control", "Shift"	}, i,
+				function () if client.focus then awful.client.toggletag(shifty.getpos(i)) end end),
+				function(_, k) table.insert(globalkeys, k) end)
+
+	-- move clients to other tags
+	table.foreach(awful.key({ modkey, "Shift" }, i,
+				function ()
+					if client.focus then
+						local c = client.focus
+						slave = not ( client.focus == awful.client.getmaster(mouse.screen))
+						t = shifty.getpos(i)
+						awful.client.movetotag(t)
+						awful.tag.viewonly(t)
+						if slave then
+							awful.client.setslave(c)
+						end
+					end
+				end),
+				function(_, k) table.insert(globalkeys, k) end)
 end
 
 -- Set keys
@@ -426,6 +441,6 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.add_signal("focus",	function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("unfocus",	function(c) c.border_color = beautiful.border_normal end)
 -- }}}
