@@ -22,7 +22,7 @@ layouts = {
 -- {{{ Tags
 -- {{{1 Tags definition
 shifty.config.tags = {
-	["[1. code]"] = {
+	["[ 1. code]"] = {
 		layout = layouts[4],
 		screen = math.max(screen.count(), 2),
 		position = 1,
@@ -30,33 +30,33 @@ shifty.config.tags = {
 		exclusive = false,
 		spawn = "gvim --servername 1"
 	},
-	["[2. sh]"] = {
+	["[ 2. sh]"] = {
 		layout = layouts[1],
 		screen = 1,
 		position = 2,
 		init = true,
 		--spawn = terminal
 	},
-	["[3. misc]"] = {
+	["[ 3. misc]"] = {
 		layout = layouts[1],
 		screen = 1,
 		position = 3,
 		nopopup = true,
 		exclusive = true
 	},
-	["[4. doc]"] = {
+	["[ 4. doc]"] = {
 		layout = layouts[4],
 		screen = 1,
 		position = 4
 	},
-	["[5. im]"] = {
+	["[ 5. im]"] = {
 		layout = layouts[1],
 		screen = 1,
 		position = 5,
 		nopopup = true,
 		exclusive = true
 	},
-	["[6. www]"] = {
+	["[ 6. www]"] = {
 		layout = layouts[4],
 		screen = 1,
 		position = 6,
@@ -64,23 +64,30 @@ shifty.config.tags = {
 		exclusive = false,
 		spawn = browser
 	},
-	["[7. zik]"] = {
+	["[ 7. zik]"] = {
 		layout = layouts[4],
 		position = 7,
 		nopopup = true,
 		exclusive = true
 	},
-	["[8. media]"] = {
+	["[ 8. media]"] = {
 		layout = layouts[1],
 		screen = 1,
 		position = 8,
 		nopopup = false,
 		exclusive = false
 	},
-	["[9. IDE]"] = {
+	["[ 9. ide]"] = {
 		layout = layouts[4],
 		screen = math.max(screen.count(), 2),
-		position = 1,
+		position = 9,
+		nopopup = true,
+		exclusive = false
+	},
+	["[10. draw]"] = {
+		layout = layouts[4],
+		screen = math.max(screen.count(), 2),
+		position = 10,
 		nopopup = true,
 		exclusive = false
 	},
@@ -98,61 +105,66 @@ shifty.config.tags = {
 shifty.config.apps = {
 	{
 		match = { "Gvim", "gvim" },
-		tag = "[1. code]",
+		tag = "[ 1. code]",
 		opacity = 0.50
 	},
 	{
 		match = { "rxvt" },
-		tag = "[2. sh]",
+		tag = "[ 2. sh]",
 		opacity = 0.85
 	},
         {
 		match = { "Wireshark" },
-		tag = "[3. misc]",
+		tag = "[ 3. misc]",
 		opacity = 1.0
 	},
         {
 		match = { "gitk" },
-		tag = "[3. misc]",
+		tag = "[ 3. misc]",
 		opacity = 1.0
 	},
 	{
 		match = { "Evince", "evince" },
-		tag = "[4. doc]",
+		tag = "[ 4. doc]",
 		opacity = 1.0
 	},
         {
 		match = { "Pidgin" },
-		tag = "[5. im]",
+		tag = "[ 5. im]",
 		float = true
 	},
         {
 		match = { "Chromium", browser } ,
-		tag = "[6. www]",
+		tag = "[ 6. www]",
 		opacity = 0.95
 	} ,
 	{
 		match = { "spotify" },
-		tag = "[7. zik]",
+		tag = "[ 7. zik]",
 		opacity = 1.0
 	},
 	{
 		match = { "vlc" },
-		tag = "[8. media]",
+		tag = "[ 8. media]",
 		opacity = 1.0
 	},
 	{
-		match = { "Eclipse", "eclipse" },
-		tag = "[9. IDE]",
+		match = { "Eclipse" },
+		tag = "[ 9. ide]",
 		opacity = 0.90
 	},
+	-- {
+	-- 	match = { "dia" },
+	-- 	tag = "[10. draw]",
+	-- 	opacity = 0.90
+	-- },
         {
 		match = { "" },
 		buttons = awful.util.table.join(awful.button({        }, 1, function (c) client.focus = c; c:raise() end),
 						awful.button({ modkey }, 1, awful.mouse.client.move),
 						awful.button({ modkey }, 3, awful.mouse.client.resize),
 						awful.button({ modkey }, 8, awful.mouse.client.resize))
-  }
+	}
 }
 -- }}}
 

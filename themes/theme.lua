@@ -43,6 +43,7 @@ theme.layout_tiletop         			= theme.confdir .. "/icons/layouts/tiletop.png"
 -- Widget icons --
 theme.widget_cpu				= theme.confdir .. "/icons/cpu.png"
 theme.widget_bat				= theme.confdir .. "/icons/bat.png"
+theme.widget_power				= theme.confdir .. "/icons/power.png"
 theme.widget_mem				= theme.confdir .. "/icons/mem.png"
 theme.widget_fs					= theme.confdir .. "/icons/disk.png"
 theme.widget_net				= theme.confdir .. "/icons/down.png"
