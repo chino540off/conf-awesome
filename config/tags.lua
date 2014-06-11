@@ -91,6 +91,13 @@ shifty.config.tags = {
 		nopopup = true,
 		exclusive = false
 	},
+	["[11. VMs]"] = {
+		layout = layouts[4],
+		screen = math.max(screen.count(), 2),
+		position = 11,
+		nopopup = true,
+		exclusive = false
+	},
 	--["[default]"] = {
 	--	layout = layouts[1],
 	--	screen = 1,
@@ -124,7 +131,7 @@ shifty.config.apps = {
 		opacity = 1.0
 	},
 	{
-		match = { "Evince", "evince" },
+		match = { "Evince", "LibreOffice" },
 		tag = "[ 4. doc]",
 		opacity = 1.0
 	},
@@ -151,6 +158,11 @@ shifty.config.apps = {
 	{
 		match = { "Eclipse" },
 		tag = "[ 9. ide]",
+		opacity = 0.90
+	},
+	{
+		match = { "VirtualBox" },
+		tag = "[11. VMs]",
 		opacity = 0.90
 	},
 	-- {
