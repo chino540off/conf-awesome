@@ -66,11 +66,12 @@ shifty.config.tags = {
 	},
 	["[ 7. zik]"] = {
 		layout = layouts[4],
+		screen = 1,
 		position = 7,
 		nopopup = true,
 		exclusive = true
 	},
-	["[ 8. media]"] = {
+	["[ 8. vidz]"] = {
 		layout = layouts[1],
 		screen = 1,
 		position = 8,
@@ -91,7 +92,7 @@ shifty.config.tags = {
 		nopopup = true,
 		exclusive = false
 	},
-	["[11. VMs]"] = {
+	["[11. vms]"] = {
 		layout = layouts[4],
 		screen = math.max(screen.count(), 2),
 		position = 11,
@@ -121,12 +122,7 @@ shifty.config.apps = {
 		opacity = 0.85
 	},
         {
-		match = { "Wireshark" },
-		tag = "[ 3. misc]",
-		opacity = 1.0
-	},
-        {
-		match = { "gitk" },
+		match = { "Wireshark", "gitk" },
 		tag = "[ 3. misc]",
 		opacity = 1.0
 	},
@@ -152,7 +148,7 @@ shifty.config.apps = {
 	},
 	{
 		match = { "vlc" },
-		tag = "[ 8. media]",
+		tag = "[ 8. vidz]",
 		opacity = 1.0
 	},
 	{
@@ -161,15 +157,15 @@ shifty.config.apps = {
 		opacity = 0.90
 	},
 	{
-		match = { "VirtualBox" },
-		tag = "[11. VMs]",
+		match = { "dia" },
+		tag = "[10. draw]",
 		opacity = 0.90
 	},
-	-- {
-	-- 	match = { "dia" },
-	-- 	tag = "[10. draw]",
-	-- 	opacity = 0.90
-	-- },
+	{
+		match = { "VirtualBox" },
+		tag = "[11. vms]",
+		opacity = 0.90
+	},
         {
 		match = { "" },
 		buttons = awful.util.table.join(awful.button({        }, 1, function (c) client.focus = c; c:raise() end),
