@@ -36,14 +36,14 @@ vicious.register(batwidget, vicious.widgets.bat,
 		if args[1] == "-" then
 			icon_path = ""
 
-			if args[2] >= 75 then
-				icon_path = beautiful.battery_3
-			elseif args[2] >= 50 then
-				icon_path = beautiful.battery_2
-			elseif args[2] >= 25 then
-				icon_path = beautiful.battery_1
-			else
+			if args[2] <= 25 then
 				icon_path = beautiful.battery_0
+			elseif args[2] <= 50 then
+				icon_path = beautiful.battery_1
+			elseif args[2] <= 75 then
+				icon_path = beautiful.battery_2
+			else
+				icon_path = beautiful.battery_3
 			end
 
 			baticon.image = image(icon_path)
