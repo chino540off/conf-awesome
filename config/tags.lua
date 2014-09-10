@@ -156,11 +156,11 @@ shifty.config.apps = {
 		tag = "[ 9. ide]",
 		opacity = 0.90
 	},
-	{
-		match = { "dia" },
-		tag = "[10. draw]",
-		opacity = 0.90
-	},
+	-- {
+	-- 	match = { "dia" },
+	-- 	tag = "[10. draw]",
+	-- 	opacity = 0.90
+	-- },
 	{
 		match = { "VirtualBox" },
 		tag = "[11. vms]",

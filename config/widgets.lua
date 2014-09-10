@@ -3,20 +3,22 @@ local beautiful		= require("beautiful")
 local vicious		= require("vicious")
 local naughty		= require("naughty")
 
+require("config.notify")
+
 -- {{{ Wibox
 -- {{{ Reusable separators
 spacer			= widget({ type = "textbox"  })
 spacer.text		= " "
 
-separator		= widget({ type = "imagebox" })
-separator.image		= image(beautiful.widget_sep)
+separator		= widget({ type = "textbox" })
+separator.text		= " | "
 
 awesomewidget		= widget({ type = "imagebox" })
 awesomewidget.image	= image(beautiful.awesome_icon)
 -- }}}
 -- Create a textclock widget
 dateicon		= widget({ type = "imagebox" })
-dateicon.image		= image(beautiful.widget_date)
+dateicon.image		= image(beautiful.calendar_icon)
 
 datewidget		= widget({ type = "textbox" })
 vicious.register(datewidget, vicious.widgets.date, "%b %d, %R", 60)
@@ -26,32 +28,50 @@ mysystray		= widget({ type = "systray" })
 
 -- Create a battery Widget
 baticon			= widget({ type = "imagebox" })
-baticon.image		= image(beautiful.widget_bat)
+baticon.image		= image(beautiful.battery_3)
 batwidget		= widget({ type = "textbox" })
+batnotifier		= Notifier.create("Battery", beautiful.battery_3)
 vicious.register(batwidget, vicious.widgets.bat,
 	function (widget, args)
 		if args[1] == "-" then
-			baticon.image = image(beautiful.widget_bat)
-		else
-			baticon.image = image(beautiful.widget_power)
-		end
+			icon_path = ""
 
-		if args[2] == 50 then
-			naughty.notify({ title = 'Title ', text = 'text ', timeout = 5, height = 40, width = 200 })
+			if args[2] >= 75 then
+				icon_path = beautiful.battery_3
+			elseif args[2] >= 50 then
+				icon_path = beautiful.battery_2
+			elseif args[2] >= 25 then
+				icon_path = beautiful.battery_1
+			else
+				icon_path = beautiful.battery_0
+			end
+
+			baticon.image = image(icon_path)
+			batnotifier:icon_set(icon_path)
+
+			if args[2] == 60 then
+				batnotifier:notify("60%, please plug me")
+			elseif args[2] == 30 then
+				batnotifier:warning("30%, please plug me")
+			elseif args[2] == 10 then
+				batnotifier:alert("10%, please plug me")
+			end
+		else
+			baticon.image = image(beautiful.battery_charging)
 		end
 
 		return args[2] .. "%"
-	end, 61, "BAT0")
+	end, 60, "BAT0")
 
 -- {{{ Volume level
 volicon = widget({ type = "imagebox" })
-volicon.image = image(beautiful.widget_vol)
+volicon.image = image(beautiful.sound_3)
 ---- Initialize widgets
 volwidget = widget({ type = "textbox" })
 -- Enable caching
 --vicious.enable_caching(vicious.widgets.volume)
 ---- Register widgets
-vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "Master")
+vicious.register(volwidget, vicious.widgets.volume, "$1%", 2, "Master -c 1")
 -- }}}
 
 -- Create a wibox for each screen and add it
@@ -132,7 +152,7 @@ for s = 1, screen.count() do
 		end,
 		mytasklist.buttons)
 	-- Create the wibox
-	mywiboxup[s] = awful.wibox({ position = "top", screen = s, height = 16 })
+	mywiboxup[s] = awful.wibox({ position = "top", screen = s, height = 20 })
 	-- Add widgets to the wibox - order matters
 	mywiboxup[s].widgets = {
 		{
@@ -144,9 +164,9 @@ for s = 1, screen.count() do
 			layout = awful.widget.layout.horizontal.leftright
 		},
 		s == 1 and mysystray or nil,
-		separator, datewidget, dateicon,
+		separator, datewidget, spacer, dateicon,
 		separator, volwidget, spacer, volicon,
-		separator, batwidget, baticon,
+		separator, batwidget, spacer, baticon,
 		--separator, membar.widget, memicon,
 		separator,
 		-- FIXME: create a bottom wibox.
@@ -154,7 +174,7 @@ for s = 1, screen.count() do
 		layout = awful.widget.layout.horizontal.rightleft
 	}
 
-	mywiboxdown[s] = awful.wibox({ position = "bottom", screen = s, height = 16 })
+	mywiboxdown[s] = awful.wibox({ position = "bottom", screen = s, height = 20 })
 	mywiboxdown[s].widgets = {
 		{
 			awesomewidget,

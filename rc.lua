@@ -27,8 +27,15 @@ modkey		= "Mod4"
 modkey2		= "Mod1"
 
 -- Themes define colours, icons, and wallpapers
-beautiful.init(awful.util.getdir("config") .. "/themes/theme.lua")
-
+beautiful.init(awful.util.getdir("config") .. "/themes/blue/theme.lua")
+beautiful.awesome_icon		= awful.util.getdir("config") .. "/icons/awesome.png"
+beautiful.calendar_icon		= awful.util.getdir("config") .. "/icons/appbar.calendar.png"
+beautiful.battery_3		= awful.util.getdir("config") .. "/icons/appbar.battery.3.png"
+beautiful.battery_2		= awful.util.getdir("config") .. "/icons/appbar.battery.2.png"
+beautiful.battery_1		= awful.util.getdir("config") .. "/icons/appbar.battery.1.png"
+beautiful.battery_0		= awful.util.getdir("config") .. "/icons/appbar.battery.0.png"
+beautiful.battery_charging	= awful.util.getdir("config") .. "/icons/appbar.battery.charging.png"
+beautiful.sound_3		= awful.util.getdir("config") .. "/icons/appbar.sound.3.png"
 
 require("config.tags")
 require("config.menu")
