@@ -4,15 +4,21 @@
 --]]
 
 -- {{{ Required libraries
+-- Standard awesome library
 local gears     = require("gears")
 local awful     = require("awful")
-awful.rules     = require("awful.rules")
                   require("awful.autofocus")
+-- Widget and layout library
 local wibox     = require("wibox")
+-- Theme handling library
 local beautiful = require("beautiful")
+-- Notification library
 local naughty   = require("naughty")
+
 local drop      = require("scratchdrop")
 local lain      = require("lain")
+-- shifty - dynamic tagging library
+local shifty    = require("shifty")
 -- }}}
 
 -- {{{ Error handling
@@ -63,11 +69,11 @@ editor     = os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
 function expected_screen(n)
-	if n > screen.count() then return screen.count() else return n end
+    return math.max(screen.count(), n)
 end
 
 -- user defined
-browser    = "firefox"
+browser    = "chromium-browser"
 gui_editor = "gvim"
 
 local layouts = {
@@ -84,17 +90,6 @@ local layouts = {
 }
 -- }}}
 
--- {{{ Tags
-tags = {
-   names = { "web", "code", "term", "docs", "music", "im" },
-   layout = { layouts[9], layouts[9], layouts[9], layouts[9], layouts[9], layouts[9] }
-}
-for s = 1, screen.count() do
--- Each screen has its own tag table.
-   tags[s] = awful.tag(tags.names, s, tags.layout)
-end
--- }}}
-
 -- {{{ Wallpaper
 if beautiful.wallpaper then
     for s = 1, screen.count() do
@@ -103,10 +98,107 @@ if beautiful.wallpaper then
 end
 -- }}}
 
--- {{{ Freedesktop Menu
-mymainmenu = awful.menu.new({ items = require("menugen").build_menu(),
-                              theme = { height = 16, width = 130 }})
--- }}}
+-- Shifty configured tags.
+shifty.config.tags = {
+    ["[code]"] = {
+        layout    = awful.layout.suit.max,
+        mwfact    = 0.60,
+        exclusive = false,
+        position  = 1,
+        slave     = true,
+    },
+    ["[term]"]= {
+        layout    = awful.layout.suit.float,
+        exclusive = false,
+        init      = true,
+        position  = 2,
+	screen = 2,
+    },
+    ["[web]"] = {
+        layout      = awful.layout.suit.tile.bottom,
+        exclusive   = false,
+        position    = 4,
+    },
+    media = {
+        layout    = awful.layout.suit.float,
+        exclusive = false,
+        position  = 8,
+    },
+    office = {
+        layout   = awful.layout.suit.tile,
+        position = 2,
+    },
+}
+
+--- {{{ Rules
+--awful.rules.rules = {
+--    -- All clients will match this rule.
+--    { rule = { },
+--      properties = { border_width = beautiful.border_width,
+--                     border_color = beautiful.border_normal,
+--                     focus = awful.client.focus.filter,
+--                     keys = clientkeys,
+--                     buttons = clientbuttons,
+--                    size_hints_honor = false } },
+--    { rule = { class = "chromium-browser" },                           properties = { tag = tags[expected_screen(1)][1] } },
+--    { rule = { class = "Gvim" },                                       properties = { tag = tags[expected_screen(2)][2] } },
+--    { rule = { class = "URxvt" },                                      properties = { tag = tags[mouse.screen][3], opacity = 0.99, } },
+--    { rule = { class = "Spotify" },                                    properties = { tag = tags[expected_screen(1)][5] } },
+--    { rule = { class = "Pidgin" },                                     properties = { tag = tags[expected_screen(1)][6] } },
+--}
+--- }}}
+
+-- SHIFTY: application matching rules
+-- order here matters, early rules will be applied first
+shifty.config.apps = {
+    {
+        match  = {
+          class = { "Gvim", }, 
+        },
+        tag = "[code]",
+    },
+    {
+        match = {
+	  "Chromium",
+        },
+        tag = "[web]",
+    },
+    {
+        match  = {
+          class = { "URxvt", }, 
+        },
+        tag = "[term]",
+    },
+    {
+        match = { "" },
+        buttons = awful.util.table.join(
+            awful.button({}, 1, function (c) client.focus = c; c:raise() end),
+            awful.button({modkey}, 1, function(c)
+                client.focus = c
+                c:raise()
+                awful.mouse.client.move(c)
+                end),
+            awful.button({modkey}, 3, awful.mouse.client.resize)
+            )
+    },
+}
+
+-- SHIFTY: default tag creation rules
+-- parameter description
+--  * floatBars : if floating clients should always have a titlebar
+--  * guess_name : should shifty try and guess tag names when creating
+--                 new (unconfigured) tags?
+--  * guess_position: as above, but for position parameter
+--  * run : function to exec when shifty creates a new tag
+--  * all other parameters (e.g. layout, mwfact) follow awesome's tag API
+shifty.config.defaults = {
+    layout = awful.layout.suit.tile.bottom,
+    ncol = 1,
+    mwfact = 0.60,
+    floatBars = true,
+    guess_name = true,
+    guess_position = true,
+}
 
 -- {{{ Wibox
 markup      = lain.util.markup
@@ -218,7 +310,7 @@ memwidget = lain.widgets.mem({
 })
 
 -- Spacer
-spacer = wibox.widget.textbox(" ")
+spacer = wibox.widget.textbox("|")
 
 -- }}}
 
@@ -308,8 +400,10 @@ for s = 1, screen.count() do
     --right_layout:add(mailwidget)
     right_layout:add(netdownicon)
     right_layout:add(netdowninfo)
+    right_layout:add(spacer)
     right_layout:add(netupicon)
     right_layout:add(netupinfo)
+    right_layout:add(spacer)
     right_layout:add(volicon)
     right_layout:add(volumewidget)
     right_layout:add(memicon)
@@ -358,11 +452,16 @@ end
 
 -- {{{ Mouse Bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
+
+-- SHIFTY: initialize shifty
+-- the assignment of shifty.taglist must always be after its actually
+-- initialized with awful.widget.taglist.new()
+shifty.taglist = mytaglist
+shifty.init()
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
@@ -411,12 +510,6 @@ globalkeys = awful.util.table.join(
         function()
             awful.client.focus.bydirection("right")
             if client.focus then client.focus:raise() end
-        end),
-
-    -- Show Menu
-    awful.key({ modkey }, "w",
-        function ()
-            mymainmenu:show({ keygrabber = true })
         end),
 
     -- Show/Hide Wibox
@@ -522,6 +615,11 @@ clientkeys = awful.util.table.join(
         end)
 )
 
+-- SHIFTY: assign client keys to shifty for use in
+-- match() function(manage hook)
+shifty.config.clientkeys = clientkeys
+shifty.config.modkey = modkey
+
 -- Bind all key numbers to tags.
 -- be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
@@ -574,24 +672,6 @@ clientbuttons = awful.util.table.join(
 
 -- Set keys
 root.keys(globalkeys)
--- }}}
-
--- {{{ Rules
-awful.rules.rules = {
-    -- All clients will match this rule.
-    { rule = { },
-      properties = { border_width = beautiful.border_width,
-                     border_color = beautiful.border_normal,
-                     focus = awful.client.focus.filter,
-                     keys = clientkeys,
-                     buttons = clientbuttons,
-		     size_hints_honor = false } },
-    { rule = { class = "chromium-browser" },				properties = { tag = tags[expected_screen(1)][1] } },
-    { rule = { class = "Gvim" },					properties = { tag = tags[expected_screen(2)][2] } },
-    { rule = { class = "URxvt" },					properties = { tag = tags[mouse.screen][3], opacity = 0.99, } },
-    { rule = { class = "Spotify" },					properties = { tag = tags[expected_screen(1)][5] } },
-    { rule = { class = "Pidgin" },					properties = { tag = tags[expected_screen(1)][6] } },
-}
 -- }}}
 
 -- {{{ Signals
