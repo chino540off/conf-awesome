@@ -69,7 +69,7 @@ editor     = os.getenv("EDITOR") or "nano" or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
 function expected_screen(n)
-    return math.max(screen.count(), n)
+    return math.min(screen.count(), n)
 end
 
 -- user defined
@@ -101,76 +101,63 @@ end
 -- Shifty configured tags.
 shifty.config.tags = {
     ["[code]"] = {
-        layout    = awful.layout.suit.max,
-        mwfact    = 0.60,
-        exclusive = false,
-        position  = 1,
-        slave     = true,
+      layout = awful.layout.suit.max,
+      slave = true,
+      position = 1,
+      exclusive = true,
+      max_clients = 2,
+      screen = expected_screen(2),
     },
-    ["[term]"]= {
-        layout    = awful.layout.suit.float,
-        exclusive = false,
-        init      = true,
-        position  = 2,
-	screen = 2,
+    ["[term]"] = {
+      layout = awful.layout.suit.float,
+      exclusive = false,
+      position = 2,
     },
     ["[web]"] = {
-        layout      = awful.layout.suit.tile.bottom,
-        exclusive   = false,
-        position    = 4,
+      layout = awful.layout.suit.tile.bottom,
+      position = 4,
     },
-    media = {
-        layout    = awful.layout.suit.float,
-        exclusive = false,
-        position  = 8,
+    ["[video]"] = {
+      layout = awful.layout.suit.max,
+      exclusive = false,
+      position = 8,
     },
-    office = {
-        layout   = awful.layout.suit.tile,
-        position = 2,
+    ["[music]"] = {
+      layout = awful.layout.suit.max,
+      exclusive = false,
+      position = 10,
+    },
+    ["[office]"] = {
+      layout = awful.layout.suit.tile,
+      position = 2,
     },
 }
-
---- {{{ Rules
---awful.rules.rules = {
---    -- All clients will match this rule.
---    { rule = { },
---      properties = { border_width = beautiful.border_width,
---                     border_color = beautiful.border_normal,
---                     focus = awful.client.focus.filter,
---                     keys = clientkeys,
---                     buttons = clientbuttons,
---                    size_hints_honor = false } },
---    { rule = { class = "chromium-browser" },                           properties = { tag = tags[expected_screen(1)][1] } },
---    { rule = { class = "Gvim" },                                       properties = { tag = tags[expected_screen(2)][2] } },
---    { rule = { class = "URxvt" },                                      properties = { tag = tags[mouse.screen][3], opacity = 0.99, } },
---    { rule = { class = "Spotify" },                                    properties = { tag = tags[expected_screen(1)][5] } },
---    { rule = { class = "Pidgin" },                                     properties = { tag = tags[expected_screen(1)][6] } },
---}
---- }}}
 
 -- SHIFTY: application matching rules
 -- order here matters, early rules will be applied first
 shifty.config.apps = {
     {
-        match  = {
-          class = { "Gvim", }, 
-        },
-        tag = "[code]",
+      match = { class = { "Gvim", }, },
+      tag = "[code]",
     },
     {
-        match = {
-	  "Chromium",
-        },
-        tag = "[web]",
+      match = { "Chromium" },
+      tag = "[web]",
     },
     {
-        match  = {
-          class = { "URxvt", }, 
-        },
-        tag = "[term]",
+      match = { class = { "URxvt", }, },
+      tag = "[term]",
     },
     {
-        match = { "" },
+      match = { class = { "spotify", "Spotify", }, },
+      tag = "[music]",
+    },
+    {
+      match = { class = { "gitk", "Gitk", }, },
+      tag = "[code]",
+    },
+    {
+      match = { "" },
         buttons = awful.util.table.join(
             awful.button({}, 1, function (c) client.focus = c; c:raise() end),
             awful.button({modkey}, 1, function(c)
@@ -194,6 +181,7 @@ shifty.config.apps = {
 shifty.config.defaults = {
     layout = awful.layout.suit.tile.bottom,
     ncol = 1,
+    screen = 1,
     mwfact = 0.60,
     floatBars = true,
     guess_name = true,
