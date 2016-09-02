@@ -97,10 +97,16 @@ if beautiful.wallpaper then
     end
 end
 -- }}}
+t_code   = "[code]"
+t_term   = "[term]"
+t_web    = "[web]"
+t_video  = "[video]"
+t_music  = "[music]"
+t_office = "[office]"
 
 -- Shifty configured tags.
 shifty.config.tags = {
-    ["[code]"] = {
+    [t_code] = {
       layout = awful.layout.suit.max,
       slave = true,
       position = 1,
@@ -108,28 +114,27 @@ shifty.config.tags = {
       max_clients = 2,
       screen = expected_screen(2),
     },
-    ["[term]"] = {
+    [t_term] = {
       layout = awful.layout.suit.float,
       exclusive = false,
       position = 2,
     },
-    ["[web]"] = {
+    [t_web] = {
       layout = awful.layout.suit.tile.bottom,
       position = 4,
     },
-    ["[video]"] = {
+    [t_video] = {
       layout = awful.layout.suit.max,
       exclusive = false,
       position = 8,
     },
-    ["[music]"] = {
+    [t_music] = {
       layout = awful.layout.suit.max,
-      exclusive = false,
       position = 10,
     },
-    ["[office]"] = {
+    [t_office] = {
       layout = awful.layout.suit.tile,
-      position = 2,
+      position = 6,
     },
 }
 
@@ -138,23 +143,27 @@ shifty.config.tags = {
 shifty.config.apps = {
     {
       match = { class = { "Gvim", }, },
-      tag = "[code]",
+      tag = t_code,
     },
     {
       match = { "Chromium" },
-      tag = "[web]",
+      tag = t_web,
     },
     {
       match = { class = { "URxvt", }, },
-      tag = "[term]",
+      tag = t_term,
     },
     {
-      match = { class = { "spotify", "Spotify", }, },
-      tag = "[music]",
+      match = { class = { "Spotify", }, },
+      tag = t_music,
     },
     {
       match = { class = { "gitk", "Gitk", }, },
-      tag = "[code]",
+      tag = t_gitk,
+    },
+    {
+      match = { "LibreOffice" },
+      tag = t_office,
     },
     {
       match = { "" },
