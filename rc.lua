@@ -305,6 +305,15 @@ memwidget = lain.widgets.mem({
     end
 })
 
+-- Spotify
+spotifyicon = wibox.widget.imagebox(beautiful.widget_note)
+mytextspotify = lain.widgets.abase({
+    timeout  = 10,
+    cmd      = os.getenv("HOME") .. "/.config/awesome/scripts/sp current",
+    settings = function()
+        widget:set_markup(markup("#9ACD32", output) .. " ")
+    end
+})
 -- Spacer
 spacer = wibox.widget.textbox("|")
 
@@ -421,6 +430,9 @@ for s = 1, screen.count() do
     right_layout:add(spacer)
     right_layout:add(baticon)
     right_layout:add(batwidget)
+    right_layout:add(spacer)
+    right_layout:add(spotifyicon)
+    right_layout:add(mytextspotify)
     right_layout:add(spacer)
     right_layout:add(clockicon)
     right_layout:add(mytextclock)
