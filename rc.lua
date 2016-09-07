@@ -309,7 +309,7 @@ memwidget = lain.widgets.mem({
 spotifyicon = wibox.widget.imagebox(beautiful.widget_note)
 mytextspotify = lain.widgets.abase({
     timeout  = 10,
-    cmd      = os.getenv("HOME") .. "/.config/awesome/scripts/sp current",
+    cmd      = os.getenv("HOME") .. "/local/bin/sp current",
     settings = function()
         widget:set_markup(markup("#9ACD32", output) .. " ")
     end
@@ -438,6 +438,7 @@ for s = 1, screen.count() do
     right_layout:add(mytextclock)
     if s == 1 then
       right_layout:add(spacer)
+      right_layout:add(wibox.widget.textbox(" "))
       right_layout:add(wibox.widget.systray())
     end
 
