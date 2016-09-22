@@ -77,18 +77,26 @@ browser    = "chromium-browser"
 gui_editor = "gvim"
 
 local layouts = {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
+    lain.layout.termfair,
+    lain.layout.centerwork,
 }
 -- }}}
+
+theme.lain_icons         = os.getenv("HOME") ..  "/.config/awesome/lain/icons/layout/default/"
+theme.layout_termfair    = theme.lain_icons .. "termfairw.png"
+theme.layout_cascade     = theme.lain_icons .. "cascadew.png"
+theme.layout_cascadetile = theme.lain_icons .. "cascadetilew.png"
+theme.layout_centerwork  = theme.lain_icons .. "centerworkw.png"
+
+lain.layout.termfair.nmaster = 3
+lain.layout.termfair.ncol = 1
+
+lain.layout.centerwork.top_left = 0
+lain.layout.centerwork.top_right = 1
+lain.layout.centerwork.bottom_left = 2
+lain.layout.centerwork.bottom_right = 3
 
 -- {{{ Wallpaper
 if beautiful.wallpaper then
@@ -103,6 +111,7 @@ tyrannical.tags = {
         name          = "[.term.]",
         init          = true,
         exclusive     = true,
+        volatile      = true,
         screen        = {1, 2},
         layout        = awful.layout.suit.tile,
         instance      = { "dev", "ops", },
