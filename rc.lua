@@ -60,6 +60,7 @@ run_once("unclutter -root")
 
 -- beautiful init
 beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/multicolor/theme.lua")
+theme.wallpaper         = os.getenv("HOME") ..  "/.config/awesome/background.jpg"
 
 -- common
 modkey     = "Mod4"
