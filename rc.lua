@@ -249,7 +249,19 @@ volumewidget = lain.widgets.alsa({
     end
 })
 
+function getip(dev)
+  local helpers = require("lain.helpers")
+
+  local ip = helpers.read_pipe("ip addr show " .. dev .. " | grep -w inet | cut -d' ' -f6")
+  if ip then
+    return ip
+  else
+    return "N/A"
+  end
+end
+
 -- Net
+netip = wibox.widget.textbox()
 netdownicon = wibox.widget.imagebox(beautiful.widget_netdown)
 --netdownicon.align = "middle"
 netdowninfo = wibox.widget.textbox()
@@ -265,6 +277,11 @@ netupinfo = lain.widgets.net({
 
         widget:set_markup(markup("#e54c62", net_now.sent .. " "))
         netdowninfo:set_markup(markup("#87af5f", net_now.received .. " "))
+        ip_text = " "
+        for dev, v in pairs(net_now.devices) do
+          ip_text = ip_text .. dev .. ": " .. getip(dev)
+        end
+        netip:set_markup(markup("#E662FF", ip_text))
     end
 })
 
@@ -375,9 +392,9 @@ for s = 1, screen.count() do
     --right_layout:add(mailicon)
     --right_layout:add(mailwidget)
     right_layout:add(spacer)
+    right_layout:add(netip)
     right_layout:add(netdownicon)
     right_layout:add(netdowninfo)
-    right_layout:add(spacer)
     right_layout:add(netupicon)
     right_layout:add(netupinfo)
     right_layout:add(spacer)
