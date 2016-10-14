@@ -132,6 +132,18 @@ tyrannical.tags = {
         class         = { "Evince", }
     },
     {
+        name          = "[.office.]",
+        volatile      = true,
+        init          = false,
+        exclusive     = true,
+        layout        = awful.layout.suit.max,
+        class         = {
+          "libreoffice",
+          "libreoffice-startcenter",
+          "libreoffice-calc",
+        }
+    },
+    {
         name          = "[.music.]",
         volatile      = true,
         init          = false,
