@@ -98,9 +98,11 @@ tyrannical.tags = {
         name          = "[.term.]",
         init          = true,
         exclusive     = true,
-        volatile      = true,
         screen        = {1, 2},
         layout        = awful.layout.suit.tile,
+        focus_new     = true,
+        selected      = true,
+        index         = 1,
         instance      = { "dev", "ops", },
         class         = { "urxvt", }
     },
@@ -145,9 +147,13 @@ tyrannical.tags = {
     },
     {
         name          = "[.music.]",
-        volatile      = true,
         init          = false,
         exclusive     = true,
+        volatile      = true,
+        focus_new     = true,
+        selected      = true,
+        screen        = { 2 },
+        index         = 10,
         layout        = awful.layout.suit.max,
         class         = { "spotify", }
     },
