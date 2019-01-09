@@ -1,0 +1,12 @@
+[submodule "themes"]
+	path = themes
+	url = https://github.com/chino540off/conf-awesome-themes
+[submodule "lain"]
+	path = lain
+	url = https://github.com/copycat-killer/lain
+[submodule "tyrannical"]
+	path = tyrannical
+	url = https://github.com/Elv13/tyrannical
+[submodule "radical"]
+	path = radical
+	url = https://github.com/Elv13/radical
