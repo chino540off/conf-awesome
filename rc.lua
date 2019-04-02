@@ -363,8 +363,8 @@ awful.screen.connect_for_each_screen(function(s)
       },
       { -- Right widgets
         layout = wibox.layout.fixed.horizontal,
-        wibox.widget.systray(),
         mytextclock,
+        wibox.widget.systray(),
       },
     }
 
@@ -406,6 +406,9 @@ globalkeys = awful.util.table.join(
     {description = "view next", group = "tag"}),
   awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
     {description = "go back", group = "tag"}),
+
+  awful.key({ modkey, "Shift"   }, "x",      function() awful.spawn("xtrlock") end,
+    {description="show help", group="awesome"}),
 
   awful.key({ modkey,           }, "j",
     function ()
@@ -481,6 +484,25 @@ globalkeys = awful.util.table.join(
   -- Prompt
   awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
     {description = "run prompt", group = "launcher"}),
+
+  awful.key({ modkey, "Shift" },   "Return",
+    function ()
+      awful.prompt.run {
+        prompt       = "Tag: ",
+        textbox      = awful.screen.focused().mypromptbox.widget,
+        exe_callback = function(tag_name)
+          awful.spawn(terminal,
+          {
+            new_tag = {
+              name = "[." .. tag_name .. ".]",
+              exclusive = true,
+              volatile = true,
+            }
+          })
+        end
+      }
+    end,
+    {description = "tag prompt", group = "launcher"}),
 
   awful.key({ modkey }, "x",
     function ()
