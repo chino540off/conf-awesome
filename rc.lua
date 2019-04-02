@@ -118,6 +118,7 @@ tyrannical.tags = {
     volatile      = true,
     screen        = 1,
     layout        = awful.layout.suit.max,
+    index         = 2,
     class         = { "chromium-browser", }
   },
   {
@@ -128,7 +129,45 @@ tyrannical.tags = {
     volatile      = true,
     screen        = {2, 1},
     layout        = awful.layout.suit.max,
-    class         = { "Gvim", }
+    index         = 3,
+    class         = {
+      "Gvim",
+      "Neovim", ".", -- GNvim
+    }
+  },
+  {
+    name          = "[.mail.]",
+    volatile      = true,
+    init          = false,
+    exclusive     = true,
+    layout        = awful.layout.suit.max,
+    index         = 4,
+    class         = {
+      "Thunderbird",
+      "Mail",
+    }
+  },
+  {
+    name          = "[.im.]",
+    volatile      = true,
+    init          = false,
+    exclusive     = true,
+    layout        = awful.layout.suit.max,
+    index         = 5,
+    class         = {
+      "Slack", "slack",
+    }
+  },
+  {
+    name          = "[.live.]",
+    volatile      = true,
+    init          = false,
+    exclusive     = true,
+    layout        = awful.layout.suit.max,
+    index         = 6,
+    class         = {
+      "zoom",
+    }
   },
   {
     name          = "[.doc.]",
@@ -136,7 +175,10 @@ tyrannical.tags = {
     init          = false,
     exclusive     = true,
     layout        = awful.layout.suit.max,
-    class         = { "Evince", }
+    index         = 7,
+    class         = {
+      "Evince",
+    }
   },
   {
     name          = "[.office.]",
@@ -144,6 +186,7 @@ tyrannical.tags = {
     init          = false,
     exclusive     = true,
     layout        = awful.layout.suit.max,
+    index         = 8,
     class         = {
       "libreoffice",
       "libreoffice-startcenter",
@@ -167,6 +210,7 @@ tyrannical.tags = {
     volatile      = true,
     init          = false,
     exclusive     = true,
+    index         = 11,
     layout        = awful.layout.suit.max,
     class         = { "vlc", }
   },
