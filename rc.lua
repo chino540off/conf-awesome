@@ -258,9 +258,47 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
+local lain = require("lain")
+local markup = lain.util.markup
+
 -- {{{ Wibox
+-- Create a spacer
+spacer = wibox.widget.textbox("  |")
+
 -- Create a textclock widget
-mytextclock = awful.widget.textclock()
+mytextclock = awful.widget.textclock(markup(theme.fg_blue, " %a %b %d, %H:%M"))
+
+-- Create a battery widget
+baticon = wibox.widget.imagebox(beautiful.widget_batt)
+bat = lain.widget.bat({
+  settings = function()
+    widget:set_markup(markup(theme.fg_blue, bat_now.perc .. "%"))
+  end
+})
+
+-- Create a CPU widget
+cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
+cpu = lain.widget.cpu({
+  settings = function()
+    widget:set_markup(markup("#e33a6e", cpu_now.usage .. "%"))
+  end
+})
+
+-- Create a Memory widget
+memicon = wibox.widget.imagebox(beautiful.widget_mem)
+mem = lain.widget.mem({
+  settings = function()
+    widget:set_markup(markup("#e0da37", mem_now.used .. "M"))
+  end
+})
+
+-- Create a Spotify widget
+spotifyicon = wibox.widget.imagebox(beautiful.widget_note)
+spotify = awful.widget.watch(os.getenv("HOME") .. "/local/bin/sp current", 10,
+  function(widget, stdout)
+    widget:set_markup(markup("#9ACD32", stdout))
+  end
+)
 
 -- Create a wibox for each screen and add it
 -- @TAGLIST_BUTTON@
@@ -363,7 +401,27 @@ awful.screen.connect_for_each_screen(function(s)
       },
       { -- Right widgets
         layout = wibox.layout.fixed.horizontal,
+
+        spacer,
+        spotifyicon,
+        spotify,
+
+        spacer,
+        memicon,
+        mem.widget,
+
+        spacer,
+        cpuicon,
+        cpu.widget,
+
+        spacer,
+        baticon,
+        bat.widget,
+
+        spacer,
         mytextclock,
+
+        spacer,
         wibox.widget.systray(),
       },
     }
