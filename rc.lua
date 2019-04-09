@@ -465,7 +465,7 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
     {description = "go back", group = "tag"}),
 
-  awful.key({ modkey, "Shift"   }, "x",      function() awful.spawn("xtrlock") end,
+  awful.key({ modkey, "Shift"   }, "x",      function() awful.spawn("xtrlock -b") end,
     {description="show help", group="awesome"}),
 
   awful.key({ modkey,           }, "j",
