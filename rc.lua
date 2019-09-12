@@ -119,7 +119,10 @@ tyrannical.tags = {
     screen        = 1,
     layout        = awful.layout.suit.max,
     index         = 2,
-    class         = { "chromium-browser", }
+    class         = {
+      "chromium-browser",
+      "brave-browser",
+    }
   },
   {
     name          = "[.code.]",
